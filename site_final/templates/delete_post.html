@@ -9,6 +9,8 @@
 <body>
 
     {% block content %}
+
+    {% if user.is_authenticated %}
     <h1>Excluindo o seu post</h1>
     <h3>Excluindo: {{post.título}}</h3>
     <br/><br/>
@@ -20,6 +22,11 @@
     <strong>Tem certeza que deseja excluir?</strong><br><br>
     <button class="btn btn-dark">Excluir</button>
     
+    {% else %}
+    <h1>Você deve estar logado para acessar essa página</h1>
+    {% endif %}
+
+
 
     {% endblock %}
 </body>

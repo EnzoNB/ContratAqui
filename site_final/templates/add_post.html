@@ -1,9 +1,12 @@
-{% extends 'base.html' %}   
+{% extends 'base.html' %}
 {% block title %}Postando{% endblock %}
 
 {% block content %}
+
+
+{% if user.is_authenticated %}
 <h1>Postando</h1>
-<br/><br/>
+<br /><br />
 
 <div class="form-group">
     <form method="POST">
@@ -12,5 +15,8 @@
 </div>
 <button class="btn btn-dark">Post</button>
 
+{% else %}
+<h1>Você deve estar logado para acessar essa página</h1>
+{% endif %}
 
 {% endblock %}"

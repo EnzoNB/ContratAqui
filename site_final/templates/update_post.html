@@ -9,6 +9,8 @@
 <body>
 
     {% block content %}
+
+    {% if user.is_authenticated %}
     <h1>Editando o seu post</h1>
     <br/><br/>
     
@@ -19,7 +21,10 @@
     </div>
     <button class="btn btn-dark">Editar</button>
     
-
+    {% else %}
+    <h1>Você deve estar logado para acessar essa página</h1>
+    {% endif %}
+    
     {% endblock %}
 </body>
 </html>
