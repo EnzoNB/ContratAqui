@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog de Games</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+    <h1>Posts</h1>
+    <ul>
+    {% for post in object_list %}
+    <li>
+    <a href="{% url 'article-detail' post.pk %}", class="btn btn-outline-primary">{{post.título}}</a> - {{post.autor.first_name}}
+    {{post.autor.last_name}} - <strong> Publicado em {{post.data_postagem|date:"d/m/Y H:i"}}</strong><br/>
+    {{post.corpo|slice:":200"|safe}} 
+    </li>
+    {% endfor %}
+    </ul>
+
+    {% endblock %}
+</body>
+</html>

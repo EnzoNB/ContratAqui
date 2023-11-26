@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% extends 'base.html' %}
+    <title>Categorias</title>
+</head>
+<body>
+    
+    {% block content %}
+    <h1>Categorias</h1> 
+    {% for item in categories_lista %}
+    <li><a class="btn btn-outline-success" href="{% url 'Category' item %}">{{item}}</a></li>
+    <h6>{{item.descrição}}</h6>
+    {% endfor %}
+    {% endblock %}
+</body>
+</html>
