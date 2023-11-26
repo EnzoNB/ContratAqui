@@ -1,5 +1,6 @@
 from django import forms
-from .models import Post, Comment,Category
+from .models import Post, Comment,Category,Servico,Categoria,SubCategoria
+from ajax_select.fields import AutoCompleteSelectField
 
 choices_all=Category.objects.all().values_list('type','type')
 choices_dynamic = []
@@ -45,3 +46,13 @@ class CommentForm(forms.ModelForm):
             'nome': forms.TextInput(attrs={'class': 'form-control',"placeholder":"Insira aqui o título de sua postagem"}),
             'corpo': forms.Textarea(attrs={'class': 'form-control',"placeholder":"Insira aqui de sua postagem"}),
         }
+
+
+
+
+class ServicoForm(forms.ModelForm):
+    class Meta:
+        model = Servico
+        fields = ['nome', 'descricao', 'categoria', 'subcategoria']
+
+    subcategoria = AutoCompleteSelectField('subcategoria', required=False)
