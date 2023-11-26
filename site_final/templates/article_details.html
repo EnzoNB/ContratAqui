@@ -19,16 +19,21 @@
         <hr>
         {{ post.corpo|safe }}
 
+
+
         {% if user.is_authenticated %}
+        {% if user.id == post.autor.id%}
+        
 
         <br /><br />
         <a href="{% url 'home' %}" class="btn btn-outline-dark">Retornar</a> <a href="{% url 'update_post' post.pk %}" ,
-            class="btn btn-outline-warning">Editar</a> <a href="{% url 'delete_post' post.pk %}" ,
+            class="btn btn-outline-warning">Editar</a> 
+            <a href="{% url 'delete_post' post.pk %}" ,
             class="btn btn-outline-danger">Excluir</a>
         <br><br />
 
 
-        
+        {% endif %}
         {% endif %}
 
         <hr>

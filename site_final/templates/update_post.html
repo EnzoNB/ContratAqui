@@ -11,6 +11,7 @@
     {% block content %}
 
     {% if user.is_authenticated %}
+    {% if user.id == post.autor.id%}
     <h1>Editando o seu post</h1>
     <br/><br/>
     
@@ -24,7 +25,10 @@
     {% else %}
     <h1>Você deve estar logado para acessar essa página</h1>
     {% endif %}
-    
+    {% else %}
+    <h1>Você deve estar logado para acessar essa página</h1>
+    {% endif %}
+
     {% endblock %}
 </body>
 </html>
