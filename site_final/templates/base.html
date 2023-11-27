@@ -19,15 +19,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-
-
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Serviços Populares</a>
             <ul class="dropdown-menu">
-
               {% for item in list_types %}
-              <li><a class="dropdown-item" href="{% url 'Category' item %}">{{item}}</a></li>
+              <li><a class="dropdown-item" href="{% url 'subcategoria_list' item%}">{{item}}</a></li>
               {% endfor %}
               {% if user.is_authenticated %}
               <li>
@@ -39,55 +35,43 @@
               {% endif %}
             </ul>
           </li>
-
-
+        </ul>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           {% if user.is_authenticated %}
-
-          <li class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <a class="nav-link" href="{% url 'servico-create' %}">Adicionar Post</a>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'servico-create' %}">Adicionar Novo Serviço</a>
           </li>
-
-          <li class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">Sair</a>
           </li>
-
           {% else %}
-
-          <li class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'register' %}">Criar Conta</a>
           </li>
-
-          <li class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'login' %}">Entrar</a>
           </li>
-
           {% endif %}
-
         </ul>
+        <form class="d-flex" role="search" method="POST" action="{% url 'search' %}">
+          {% csrf_token %}
+          <input class="form-control me-2" type="search" placeholder="Buscar Serviço" aria-label="Search" name = "searched">
+          <button class="btn btn-outline-secundary" type="submit">Buscar</button>
+        </form>
       </div>
     </div>
   </nav>
   <br /><br />
   <div class="container">
     {% block content %}
-
     {% endblock %}
   </div>
-
-
-
-
-
-
-
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
     crossorigin="anonymous"></script>
-  <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>-->
 </body>
 
 </html>
