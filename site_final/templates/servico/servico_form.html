@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContratAqui</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#id_categoria').change(function(){
+                var categoriaId = $(this).val();
+                if (categoriaId) {
+                    $.ajax({
+                        url: '/get_subcategorias/',
+                        type: 'GET',
+                        data: {'categoria_id': categoriaId},
+                        success: function(data){
+                            $('#id_subcategoria').html(data.options);
+                        }
+                    });
+                } else {
+                    $('#id_subcategoria').empty();
+                }
+            });
+        });
+    </script>    
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+        <h1>Adicionar Novo Serviço</h1>
+        <form method="post">
+            {% csrf_token %}
+            Serviço :{{ form.nome }}
+            <br>
+            <br>
+            <br>
+            Descrição do serviço: {{ form.descricao }}
+            <br>
+            <br>
+            <br>
+            <!-- Campo de Categoria -->
+            <label for="id_categoria">Categoria:</label>
+            {{ form.categoria }}
+            <br>
+            <br>
+            <br>
+            <!-- Campo de Subcategoria -->
+            <label for="id_subcategoria">Subcategoria:</label>
+            <select name="subcategoria" id="id_subcategoria">
+                <!-- As opções de subcategorias serão preenchidas dinamicamente pelo JavaScript -->
+            </select>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button type="submit">Salvar Serviço</button>
+        </form>
+    {% endblock %}
+</body>
+</html>

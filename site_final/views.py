@@ -1,20 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render,redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Post, Comment, Category
-from .forms import PostForm, EditForm, CommentForm
+from .models import Post, Comment, Category,Categoria,SubCategoria,Servico
+from .forms import PostForm, EditForm, CommentForm,ServicoForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import JsonResponse
+
+
 
 
 class HomeView(ListView):
-    model = Post
     template_name = "home.html"
-    ordering = ['-data_postagem']
-    
-    def get_context_data(self, *args, **kwargs):
-        list_types = Category.objects.all()
-        context = super(HomeView,self).get_context_data( *args, **kwargs)
-        context["list_types"] = list_types
-        return context
+    queryset = Categoria.objects.all()
+    context_object_name = 'categorias'
 
 class ViewDetalhadaPost(DetailView):
     model = Post
@@ -97,4 +95,99 @@ def ViewTodasCategorias(request):
     categories_lista = Category.objects.all()
     return render(request,"categories_list.html",{'categories_lista':categories_lista })
 
+################################################################################################
+
+class CategoriaListView(ListView):
+    model = Categoria
+    template_name = 'categoria_list.html'
+
+
+class CategoriaDetailView(DetailView):
+    model = Categoria
+    template_name = 'categoria_detail.html'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+
+class SubCategoriaListView(ListView):
+    model = SubCategoria
+    template_name = 'subcategoria_list.html'
+
+
+class SubCategoriaDetailView(DetailView):
+    model = SubCategoria
+    template_name = 'subcategoria_detail.html'
+    slug_field = 'slug'
+    slug_url_kwarg = 'subcategoria_slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categoria_slug = self.kwargs.get('categoria_slug')
+        subcategoria_slug = self.kwargs.get('subcategoria_slug')
+
+        categoria = get_object_or_404(Categoria, slug=categoria_slug)
+        subcategoria = get_object_or_404(SubCategoria, slug=subcategoria_slug, categoria_pai=categoria)
+
+        servicos = Servico.objects.filter(subcategoria=subcategoria)
+        context['subcategoria'] = subcategoria
+        context['servicos'] = servicos
+        return context  
+
+class ServicoCreateView(LoginRequiredMixin, CreateView):
+    model = Servico
+    form_class = ServicoForm
+    template_name = 'servico/servico_form.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
+
+class ServicoListView(ListView):
+    model = Servico
+    template_name = 'servico/servico_list.html'
+    context_object_name = 'servicos'
+
+class ServicoUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Servico
+    fields = ['nome', 'descricao']
+    template_name = 'servico/servico_editar.html'
+
+    def test_func(self):
+        servico = self.get_object()
+        return self.request.user == servico.autor
+    def get_success_url(self):
+        return reverse_lazy('servico-detail', kwargs={'pk': self.object.pk})
+
+class ServicoDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Servico
+    success_url = reverse_lazy('home')  
+    template_name = 'servico/servico_delete.html'
+
+    def test_func(self):
+        servico = self.get_object()
+        return self.request.user == servico.autor
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return redirect(success_url)
     
+class ServicoDetailView(DetailView):
+    model = Servico
+    template_name = 'servico/servico_detail.html'
+    context_object_name = 'servico'
+
+def get_subcategorias(request):
+    categoria_id = request.GET.get('categoria_id')
+    if categoria_id:
+        try:
+            subcategorias = SubCategoria.objects.filter(categoria_pai_id=categoria_id).order_by('nome')
+            options = '<option value="">---------</option>'
+            for subcategoria in subcategorias:
+                options += f'<option value="{subcategoria.pk}">{subcategoria.nome}</option>'
+            return JsonResponse({'options': options})
+        except SubCategoria.DoesNotExist:
+            pass
+    return JsonResponse({'options': ''})

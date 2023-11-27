@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "site_final",
     "usuarios_site",
+    'ajax_select',
 ]
 
 MIDDLEWARE = [
@@ -120,3 +121,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+AJAX_LOOKUP_CHANNELS = {
+    'subcategoria': {'model': 'site_final.subcategoria', 'search_field': 'nome'},
+}

@@ -8,14 +8,13 @@
 <body>
     {% extends 'base.html' %}
     {% block content %}
-        <h1>Categorias</h1>
-        <ul>
-            {% for categoria in categorias %}
-                <li>
-                    <a href="{% url 'categoria_detail' categoria.slug %}">{{ categoria.nome }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        <h1>Editar Serviço: {{ servico.nome }}</h1>
+    
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Salvar Mudanças</button>
+        </form>
     {% endblock %}
 </body>
 </html>

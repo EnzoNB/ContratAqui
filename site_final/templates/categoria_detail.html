@@ -8,11 +8,12 @@
 <body>
     {% extends 'base.html' %}
     {% block content %}
-        <h1>Categorias</h1>
+        <h1>{{ categoria.nome }}</h1>
+        <h2>Subcategorias:</h2>
         <ul>
-            {% for categoria in categorias %}
+            {% for subcategoria in categoria.subcategorias.all %}
                 <li>
-                    <a href="{% url 'categoria_detail' categoria.slug %}">{{ categoria.nome }}</a>
+                    <a href="{{ subcategoria.get_absolute_url }}">{{ subcategoria.nome }}</a>
                 </li>
             {% endfor %}
         </ul>
