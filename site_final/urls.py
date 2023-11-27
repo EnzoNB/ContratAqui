@@ -1,6 +1,6 @@
 from django import views
 from django.urls import path, include
-from .views import HomeView, ViewDetalhadaPost, ViewAdicionarPost, ViewAtualizarPost, ViewApagarPost, ViewAdicionarComentario, CategoryView, ViewTodasCategorias,ServicoDetailView,CategoriaDetailView,CategoriaListView,SubCategoriaDetailView,SubCategoriaListView,ServicoCreateView,ServicoDeleteView,ServicoListView,ServicoUpdateView
+from .views import HomeView, ViewDetalhadaPost, ViewAdicionarPost, ViewAtualizarPost, ViewApagarPost, ViewAdicionarComentario, CategoryView, ViewTodasCategorias,ServicoDetailView,CategoriaDetailView,CategoriaListView,SubCategoriaDetailView,SubCategoriaListView,ServicoCreateView,ServicoDeleteView,ServicoListView,ServicoUpdateView,SearchView
 from . import views
 
 urlpatterns = [
@@ -23,4 +23,5 @@ urlpatterns = [
     path('servico/<int:pk>/', ServicoDetailView.as_view(), name='servico-detail'),
     path('ajax_select/', include('ajax_select.urls')),
     path('get_subcategorias/', views.get_subcategorias, name='get_subcategorias'),
+    path('buscando/', SearchView, name = "search"),
 ]

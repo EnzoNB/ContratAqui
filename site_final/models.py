@@ -42,9 +42,11 @@ class Categoria(models.Model):
     nome = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True)
 
+
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.nome)
+            self.slug = slugify(self.nome).title()
+
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):

@@ -13,13 +13,19 @@ class HomeView(ListView):
     template_name = "home.html"
     queryset = Categoria.objects.all()
     context_object_name = 'categorias'
+    
+    def get_context_data(self, *args, **kwargs):
+        list_types = Categoria.objects.all()
+        context = super(HomeView,self).get_context_data( *args, **kwargs)
+        context["list_types"] = list_types
+        return context
 
 class ViewDetalhadaPost(DetailView):
     model = Post
     template_name = "article_details.html"
 
     def get_context_data(self, *args, **kwargs):
-        list_types = Category.objects.all()
+        list_types = Categoria.objects.all()
         context = super(ViewDetalhadaPost,self).get_context_data( *args, **kwargs)
         context["list_types"] = list_types
         return context
@@ -30,7 +36,7 @@ class ViewAdicionarPost(CreateView):
     template_name = "add_post.html"
 
     def get_context_data(self, *args, **kwargs):
-        list_types = Category.objects.all()
+        list_types = Categoria.objects.all()
         context = super(ViewAdicionarPost,self).get_context_data( *args, **kwargs)
         context["list_types"] = list_types
         return context
@@ -47,7 +53,7 @@ class ViewAtualizarPost(UpdateView):
     template_name = "update_post.html"
 
     def get_context_data(self, *args, **kwargs):
-        list_types = Category.objects.all()
+        list_types = Categoria.objects.all()
         context = super(ViewAtualizarPost,self).get_context_data( *args, **kwargs)
         context["list_types"] = list_types
         return context
@@ -64,10 +70,11 @@ class ViewApagarPost(DeleteView):
     
 
     def get_context_data(self, *args, **kwargs):
-        list_types = Category.objects.all()
+        list_types = Categoria.objects.all()
         context = super(ViewApagarPost,self).get_context_data( *args, **kwargs)
         context["list_types"] = list_types
         return context
+    
     success_url = reverse_lazy('home')
 
 class ViewAdicionarComentario(CreateView):
@@ -78,7 +85,7 @@ class ViewAdicionarComentario(CreateView):
     success_url = reverse_lazy('home')
 
     def get_context_data(self, *args, **kwargs):
-        list_types = Category.objects.all()
+        list_types = Categoria.objects.all()
         context = super(ViewAdicionarComentario,self).get_context_data( *args, **kwargs)
         context["list_types"] = list_types
         return context
@@ -86,6 +93,14 @@ class ViewAdicionarComentario(CreateView):
     def form_valid(self, form):
         form.instance.post_id = self.kwargs['pk']
         return super().form_valid(form)
+    
+def SearchView(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        serviços = SubCategoria.objects.filter(nome__contains=searched )
+        return render(request,"search.html",{"searched":searched,"serviços":serviços})
+    else:
+        return render(request,"search.html",{})
     
 def CategoryView(request, types):
     Category_posts = Post.objects.filter(Category__type=types).order_by('-data_postagem')
@@ -101,6 +116,12 @@ class CategoriaListView(ListView):
     model = Categoria
     template_name = 'categoria_list.html'
 
+    def get_context_data(self, *args, **kwargs):
+        list_types = Categoria.objects.all()
+        context = super(CategoriaListView,self).get_context_data( *args, **kwargs)
+        context["list_types"] = list_types
+        return context
+
 
 class CategoriaDetailView(DetailView):
     model = Categoria
@@ -108,10 +129,22 @@ class CategoriaDetailView(DetailView):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
+    def get_context_data(self, *args, **kwargs):
+        list_types = Categoria.objects.all()
+        context = super(CategoriaDetailView,self).get_context_data( *args, **kwargs)
+        context["list_types"] = list_types
+        return context
+
 
 class SubCategoriaListView(ListView):
     model = SubCategoria
     template_name = 'subcategoria_list.html'
+
+    def get_context_data(self, *args, **kwargs):
+        list_types = Categoria.objects.all()
+        context = super(SubCategoriaListView,self).get_context_data( *args, **kwargs)
+        context["list_types"] = list_types
+        return context
 
 
 class SubCategoriaDetailView(DetailView):
@@ -121,7 +154,7 @@ class SubCategoriaDetailView(DetailView):
     slug_url_kwarg = 'subcategoria_slug'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(SubCategoriaDetailView,self).get_context_data(**kwargs)
         categoria_slug = self.kwargs.get('categoria_slug')
         subcategoria_slug = self.kwargs.get('subcategoria_slug')
 
@@ -131,6 +164,7 @@ class SubCategoriaDetailView(DetailView):
         servicos = Servico.objects.filter(subcategoria=subcategoria)
         context['subcategoria'] = subcategoria
         context['servicos'] = servicos
+        
         return context  
 
 class ServicoCreateView(LoginRequiredMixin, CreateView):
@@ -138,6 +172,12 @@ class ServicoCreateView(LoginRequiredMixin, CreateView):
     form_class = ServicoForm
     template_name = 'servico/servico_form.html'
     success_url = '/'
+
+    def get_context_data(self, *args, **kwargs):
+        list_types = Categoria.objects.all()
+        context = super(ServicoCreateView,self).get_context_data( *args, **kwargs)
+        context["list_types"] = list_types
+        return context
 
     def form_valid(self, form):
         form.instance.autor = self.request.user
@@ -148,10 +188,22 @@ class ServicoListView(ListView):
     template_name = 'servico/servico_list.html'
     context_object_name = 'servicos'
 
+    def get_context_data(self, *args, **kwargs):
+        list_types = Categoria.objects.all()
+        context = super(ServicoListView,self).get_context_data( *args, **kwargs)
+        context["list_types"] = list_types
+        return context
+
 class ServicoUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Servico
     fields = ['nome', 'descricao']
     template_name = 'servico/servico_editar.html'
+
+    def get_context_data(self, *args, **kwargs):
+        list_types = Categoria.objects.all()
+        context = super(ServicoUpdateView,self).get_context_data( *args, **kwargs)
+        context["list_types"] = list_types
+        return context
 
     def test_func(self):
         servico = self.get_object()
@@ -174,10 +226,22 @@ class ServicoDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         self.object.delete()
         return redirect(success_url)
     
+    def get_context_data(self, *args, **kwargs):
+        list_types = Categoria.objects.all()
+        context = super(ServicoDeleteView,self).get_context_data( *args, **kwargs)
+        context["list_types"] = list_types
+        return context
+    
 class ServicoDetailView(DetailView):
     model = Servico
     template_name = 'servico/servico_detail.html'
     context_object_name = 'servico'
+
+    def get_context_data(self, *args, **kwargs):
+        list_types = Categoria.objects.all()
+        context = super(ServicoDetailView,self).get_context_data( *args, **kwargs)
+        context["list_types"] = list_types
+        return context
 
 def get_subcategorias(request):
     categoria_id = request.GET.get('categoria_id')
