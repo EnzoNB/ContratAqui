@@ -1,0 +1,16 @@
+{% extends 'base.html' %}   
+{% block title %}{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Perfil{% endblock %}
+
+{% block content %}
+
+<h1>{% if form.instance.pk %}Editando{% else %}Criando{% endif %} Perfil</h1>
+<br/><br/>
+
+<div class="form-group">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+</div>
+<button class="btn btn-dark">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Perfil</button>
+
+{% endblock %}

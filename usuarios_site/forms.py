@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from site_final.models import Perfil
+
 
 class RegisterUserForm(UserCreationForm):
     email = forms.EmailField(label='Email')
@@ -20,3 +22,8 @@ class RegisterUserForm(UserCreationForm):
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(label='Nome de Login')
     password = forms.CharField(label='Senha', widget=forms.PasswordInput)
+
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['bio', 'telefone', 'whatsapp', 'instagram', 'foto_de_perfil']

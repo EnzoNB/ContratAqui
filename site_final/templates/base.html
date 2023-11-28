@@ -42,7 +42,7 @@
       </form>
       <ul class="form-inline my-2 my-lg-0">
         {% if user.is_authenticated %}
-          <a class="nav-link" style="background-color: rgb(29, 29, 29) ; color: rgb(126,217,87); font-size: 15px; text-align: center;">Olá, {{ user.first_name }}!</a>
+          <a href="{%url 'editar_perfil'%}" class="nav-link" style="background-color: rgb(29, 29, 29) ; color: rgb(126,217,87); font-size: 15px; text-align: center;">Olá, {{ user.first_name }}!</a>
         {% endif %}
       </ul>
       <ul class="form-inline my-2 my-lg-0">

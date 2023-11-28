@@ -51,3 +51,11 @@ class Servico(models.Model):
 
     def __str__(self):
         return self.nome + " | SubCategoria: " + str(self.subcategoria)
+
+class Perfil(models.Model):
+    user = models.OneToOneField(User,null=True,on_delete=models.CASCADE)
+    bio = models.TextField()
+    foto_de_perfil = models.ImageField(null=True, blank=True,upload_to="imagens/perfil/")
+    telefone = models.CharField(null=True, blank=True,max_length=11)
+    whatsapp = models.CharField(null=True, blank=True,max_length=11)
+    instagram = models.CharField(null=True, blank=True,max_length=25)

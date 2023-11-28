@@ -1,25 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ContratAqui</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ContratAqui</title>
 </head>
+
 <body>
-    {% extends 'base.html' %}
-    {% block content %}
-        <h1>{{ servico.nome }}</h1>
-    
-        <p><strong>Serviço Prestado:</strong> {{ servico.nome }}</p>
-        <p><strong>Prestador de Serviço:</strong> {{ servico.autor.first_name }} {{ servico.autor.last_name }}</p>
-        <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
-        <p><strong>Preço:</strong> R${{ servico.preco }}</p>
-    
-        
-        {% if user.is_authenticated and user == servico.autor %}
-            <a href="{% url 'servico-update' pk=servico.pk %}">Editar Serviço</a>
-            <a href="{% url 'servico-delete' pk=servico.pk %}">Deletar Serviço</a>
-        {% endif %}
-    {% endblock %}
+  {% extends 'base.html' %}
+  {% block content %}
+  <h1>{{ servico.nome }}</h1>
+
+  <p><strong>Serviço Prestado:</strong> {{ servico.nome }}</p>
+  <p><strong>Prestador de Serviço:</strong> {{ servico.autor.first_name }} {{ servico.autor.last_name }}</p>
+  <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
+  <p><strong>Preço:</strong> R${{ servico.preco }}</p>
+
+
+  {% if user.is_authenticated and user == servico.autor %}
+  <a href="{% url 'servico-update' pk=servico.pk %}">Editar Serviço</a>
+  <a href="{% url 'servico-delete' pk=servico.pk %}">Deletar Serviço</a>
+  {% endif %}
+
+  <br><br><br>
+  <div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-2">
+        <img src="{{servico.autor.perfil.foto_de_perfil.url}}" class="img-fluid rounded-start">
+      </div>
+      <div class="col-md-10">
+        <div class="card-body">
+          <h5 class="card-title">Prestador: {{ servico.autor.first_name }} {{ servico.autor.last_name }}</h5>
+
+          {% if servico.autor.perfil.telefone %}
+          <span class="card-text"><small
+              class="text-body-secondary"><strong>Telefone:</strong> {{servico.autor.perfil.telefone}} </small></span>
+          {% endif %}
+          {% if servico.autor.perfil.whatsapp %}
+          <span class="card-text"><small
+              class="text-body-secondary"><strong>Whatsapp:</strong> {{servico.autor.perfil.whatsapp}} </small></span>
+          {% endif %}
+          {% if servico.autor.perfil.instagram %}
+          <span class="card-text"><small
+              class="text-body-secondary"><strong>Instagram:</strong> {{servico.autor.perfil.instagram}} </small></span>
+          {% endif %}
+
+
+          <p class="card-text">Bio: {{ servico.autor.perfil.bio }}</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
 </body>
+
 </html>
