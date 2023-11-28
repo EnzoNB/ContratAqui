@@ -3,16 +3,9 @@
 
 {% block content %}
 
-
 <h1>Buscando por {{searched}}</h1>
 {% for serviço in serviços %}
-    <li><a class="btn btn-outline-success" href="{% url 'Category' serviço %}">{{serviço}}</a><br><br/></li>
+    <li><a class="btn btn-outline-success" href="{% url 'subcategoria_detail' categoria_slug=serviço.categoria_pai.slug subcategoria_slug=serviço.slug %}">{{serviço}}</a><br><br/></li>
 {% endfor %}
-
-
-
-
-
-
 
 {% endblock %}

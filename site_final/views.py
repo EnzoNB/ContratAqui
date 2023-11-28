@@ -95,12 +95,14 @@ class ViewAdicionarComentario(CreateView):
         return super().form_valid(form)
     
 def SearchView(request):
+    list_types = Categoria.objects.all()
     if request.method == "POST":
         searched = request.POST["searched"]
         serviços = SubCategoria.objects.filter(nome__contains=searched )
-        return render(request,"search.html",{"searched":searched,"serviços":serviços})
+        return render(request,"search.html",{"searched":searched,"serviços":serviços, "list_types": list_types})
     else:
-        return render(request,"search.html",{})
+        return render(request,"search.html",{"list_types": list_types})
+
     
 def CategoryView(request, types):
     Category_posts = Post.objects.filter(Category__type=types).order_by('-data_postagem')
@@ -162,10 +164,13 @@ class SubCategoriaDetailView(DetailView):
         subcategoria = get_object_or_404(SubCategoria, slug=subcategoria_slug, categoria_pai=categoria)
 
         servicos = Servico.objects.filter(subcategoria=subcategoria)
+        list_types = Categoria.objects.all()
+
         context['subcategoria'] = subcategoria
         context['servicos'] = servicos
+        context["list_types"] = list_types
         
-        return context  
+        return context
 
 class ServicoCreateView(LoginRequiredMixin, CreateView):
     model = Servico
