@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContratAqui</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+        <h1>Categorias</h1>
+        <ul>
+            {% for categoria in categorias %}
+                <li>
+                    <a class="btn btn-success" href="{% url 'categoria_detail' categoria.slug %}">{{ categoria.nome }}</a><br><br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+</body>
+</html>

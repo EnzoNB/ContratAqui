@@ -1,0 +1,38 @@
+{% extends 'base.html' %}   
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Excluindo Post</title>
+</head>
+<body>
+
+    {% block content %}
+
+    {% if user.is_authenticated %}
+    {% if user.id == post.autor.id%}
+    <h1>Excluindo o seu post</h1>
+    <h3>Excluindo: {{post.título}}</h3>
+    <br/><br/>
+    
+    <div class="form-group">
+        <form method="POST">
+            {% csrf_token %}
+    </div>
+    <strong>Tem certeza que deseja excluir?</strong><br><br>
+    <button class="btn btn-dark">Excluir</button>
+    
+    {% else %}
+    <h1>Você deve estar logado para acessar essa página</h1>
+    {% endif %}
+    
+    {% else %}
+    <h1>Você deve estar logado para acessar essa página</h1>
+    {% endif %}
+
+
+
+    {% endblock %}
+</body>
+</html>

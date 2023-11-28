@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Postando{% endblock %}
+
+{% block content %}
+
+
+{% if user.is_authenticated %}
+<h1>Postando</h1>
+<br /><br />
+
+<div class="form-group">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+</div>
+<button class="btn btn-dark">Post</button>
+<script>
+    var name = "{{user.id}}";
+    document.getElementById('id').value = name
+</script>
+
+{% else %}
+<h1>Você deve estar logado para acessar essa página</h1>
+{% endif %}
+
+{% endblock %}"

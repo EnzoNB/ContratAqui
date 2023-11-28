@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContratAqui</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+        <h1>{{ subcategoria.nome }}</h1>
+
+        <ul>
+            {% for servico in servicos %}
+                <li>
+                    <a class="btn btn-success" href="{% url 'servico-detail' pk=servico.pk %}">{{ servico.nome }}</a><br>
+                    <strong>Prestador:</strong> {{ servico.autor.first_name }} {{ servico.autor.last_name }}<br>
+                    <!-- Adicione mais detalhes do serviço, se necessário -->
+                </li>
+            {% empty %}
+                <li>Nenhum serviço encontrado nesta subcategoria.</li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+</body>
+</html>
