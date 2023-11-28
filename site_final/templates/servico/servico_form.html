@@ -32,12 +32,13 @@
         <h1>Adicionar Novo Serviço</h1>
         <form method="post">
             {% csrf_token %}
-            Serviço :{{ form.nome }}
-            <br>
+            Nome do Serviço :{{ form.nome }}
             <br>
             <br>
             Descrição do serviço: {{ form.descricao }}
             <br>
+            <br>
+            Preço do Serviço: R${{ form.preco }}
             <br>
             <br>
             <!-- Campo de Categoria -->
@@ -51,8 +52,6 @@
             <select name="subcategoria" id="id_subcategoria">
                 <!-- As opções de subcategorias serão preenchidas dinamicamente pelo JavaScript -->
             </select>
-            <br>
-            <br>
             <br>
             <br>
             <button type="submit">Salvar Serviço</button>

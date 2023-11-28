@@ -30,7 +30,9 @@
       </ul>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
+          {% if user.is_authenticated %}
           <a class="nav-link" href="{% url 'servico-create' %}" style="padding:10px; background-color: rgb(29, 29, 29) ;color: rgb(126,217,87); font-size: 15px;">Adicionar Serviço</a>
+          {% endif %}
         </li>
       </ul>
       <form class="d-flex" role="search" method="POST" action="{% url 'search' %}">

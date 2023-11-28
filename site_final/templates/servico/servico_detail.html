@@ -13,8 +13,9 @@
         <p><strong>Serviço Prestado:</strong> {{ servico.nome }}</p>
         <p><strong>Prestador de Serviço:</strong> {{ servico.autor.first_name }} {{ servico.autor.last_name }}</p>
         <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
+        <p><strong>Preço:</strong> R${{ servico.preco }}</p>
     
-        {# Adicione um link para atualização e exclusão do serviço se necessário #}
+        
         {% if user.is_authenticated and user == servico.autor %}
             <a href="{% url 'servico-update' pk=servico.pk %}">Editar Serviço</a>
             <a href="{% url 'servico-delete' pk=servico.pk %}">Deletar Serviço</a>

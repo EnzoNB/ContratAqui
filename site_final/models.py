@@ -4,40 +4,6 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 
-
-class Category(models.Model):
-    type = models.CharField(max_length=255)
-    descrição = models.TextField()
-
-    def __str__(self):
-        return self.type
-    
-    def get_absolute_url(self):
-        return reverse('home')
-
-class Post(models.Model):
-    título = models.CharField(max_length=255)
-    tag_aba = models.CharField(max_length=255)
-    autor = models.ForeignKey(User, on_delete=models.CASCADE)
-    corpo = models.TextField()
-    data_postagem = models.DateTimeField(auto_now_add=True)
-    Category = models.ManyToManyField(Category)
-
-    def __str__(self):
-        return self.título + " | " + str(self.autor)
-    
-    def get_absolute_url(self):
-        return reverse('article-detail',args=(str(self.id)))
-
-class Comment(models.Model):
-    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
-    nome = models.CharField(max_length=255)
-    corpo = models.TextField()
-    comment_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.post.título + " | " + str(self.nome)
-###########################################################################################  
 class Categoria(models.Model):
     nome = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True)
@@ -71,6 +37,9 @@ class SubCategoria(models.Model):
 
     def __str__(self):
         return self.nome
+    
+    def __str__(self):
+        return self.nome + " | Categoria: " + str(self.categoria_pai)
 
 class Servico(models.Model):
     nome = models.CharField(max_length=100)
@@ -78,6 +47,7 @@ class Servico(models.Model):
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     subcategoria = models.ForeignKey(SubCategoria, on_delete=models.CASCADE)
+    preco = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
 
     def __str__(self):
-        return self.nome
+        return self.nome + " | SubCategoria: " + str(self.subcategoria)
