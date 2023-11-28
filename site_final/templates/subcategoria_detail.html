@@ -13,8 +13,8 @@
         <ul>
             {% for servico in servicos %}
                 <li>
-                    <a href="{% url 'servico-detail' pk=servico.pk %}">{{ servico.nome }}</a><br>
-                    <strong>Prestador:</strong> {{ servico.autor }}<br>
+                    <a class="btn btn-success" href="{% url 'servico-detail' pk=servico.pk %}">{{ servico.nome }}</a><br>
+                    <strong>Prestador:</strong> {{ servico.autor.first_name }} {{ servico.autor.last_name }}<br>
                     <!-- Adicione mais detalhes do serviço, se necessário -->
                 </li>
             {% empty %}
