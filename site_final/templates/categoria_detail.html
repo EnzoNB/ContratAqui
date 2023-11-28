@@ -13,7 +13,7 @@
         <ul>
             {% for subcategoria in categoria.subcategorias.all %}
                 <li>
-                    <a href="{{ subcategoria.get_absolute_url }}">{{ subcategoria.nome }}</a>
+                    <a  class="btn btn-success" href="{{ subcategoria.get_absolute_url }}">{{ subcategoria.nome }}</a>
                 </li>
             {% endfor %}
         </ul>

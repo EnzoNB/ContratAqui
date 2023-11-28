@@ -12,7 +12,7 @@
         <ul>
             {% for categoria in categorias %}
                 <li>
-                    <a href="{% url 'categoria_detail' categoria.slug %}">{{ categoria.nome }}</a>
+                    <a class="btn btn-success" href="{% url 'categoria_detail' categoria.slug %}">{{ categoria.nome }}</a><br><br>
                 </li>
             {% endfor %}
         </ul>

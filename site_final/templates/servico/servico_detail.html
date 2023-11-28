@@ -10,8 +10,8 @@
     {% block content %}
         <h1>{{ servico.nome }}</h1>
     
-        <p><strong>Nome:</strong> {{ servico.nome }}</p>
-        <p><strong>Prestador de Serviço:</strong> {{ servico.autor }}</p>
+        <p><strong>Serviço Prestado:</strong> {{ servico.nome }}</p>
+        <p><strong>Prestador de Serviço:</strong> {{ servico.autor.first_name }} {{ servico.autor.last_name }}</p>
         <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
     
         {# Adicione um link para atualização e exclusão do serviço se necessário #}
