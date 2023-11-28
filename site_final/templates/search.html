@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Buscando{% endblock %}
+
+{% block content %}
+
+
+<h1>Buscando por {{searched}}</h1>
+{% for serviço in serviços %}
+    <li><a class="btn btn-outline-success" href="{% url 'Category' serviço %}">{{serviço}}</a><br><br/></li>
+{% endfor %}
+
+
+
+
+
+
+
+{% endblock %}
