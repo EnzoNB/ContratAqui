@@ -19,8 +19,8 @@
 
 
   {% if user.is_authenticated and user == servico.autor %}
-  <a style="color:rgb(0, 16, 0)" href="{% url 'servico-update' pk=servico.pk %}">Editar Serviço</a>
-  <a style="color:rgb(0, 16, 0)" href="{% url 'servico-delete' pk=servico.pk %}">Deletar Serviço</a>
+  <p><b><a style="color:rgb(13, 27, 13)" href="{% url 'servico-update' pk=servico.pk %}">Editar Serviço</a></b></p>
+  <b><a style="color:rgb(13, 27, 13)" href="{% url 'servico-delete' pk=servico.pk %}">Deletar Serviço</a></b>
   {% endif %}
 
   <br><br><br>

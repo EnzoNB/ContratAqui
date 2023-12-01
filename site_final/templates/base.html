@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="padding-bottom:8%">
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
     <div class="media">
       <a  href="{% url 'home' %}">
@@ -16,9 +16,6 @@
       </a>
     </div>
     <hr>
-    <div>
-    <a class="navbar-brand" href="{% url 'home' %}" style = "padding:12px; background-color: black ; color: rgb(126,217,87); font-size: 25px;">Home</a>
-    </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown">
@@ -63,7 +60,7 @@
     </div>
   </nav>
   <br /><br />
-  <div class="container" style="background-color: rgba(22, 24, 22, 0.22);">
+  <div class="container" style="background-color: rgba(126,217,87, 0.5);">
     {% block content %}
     {% endblock %}
   </div>
@@ -85,7 +82,7 @@
   </style>
   <footer>
     <p>ContratAqui<br>
-      © Copyright 2023</p>
+      ©️ Copyright 2023</p>
   </footer>
 </body>
 
