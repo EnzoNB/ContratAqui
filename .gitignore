@@ -1,2 +1,3 @@
 __pycache__/
 db.sqlite3
+site_final\templates\servico\servico_detail.html
