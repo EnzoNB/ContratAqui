@@ -1,0 +1,38 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ContratAqui</title>
+    </head>
+    <body>
+        {% extends 'base.html' %}
+        {% block content %}
+            <h1>Propostas para o serviço "{{ servico.nome }}"</h1>
+        
+            {% if propostas %}
+                <ul>
+                    {% for proposta in propostas %}
+                        <li>
+                            {% if request.user == servico.autor %}
+                                Nome do Serviço: {{ proposta.servico.nome }} <br>
+                                Nome do Cliente: {{ proposta.cliente.username }} <br>
+                                Valor: R$ {{ proposta.valor_proposta }}
+                                <a href="{% url 'proposta_detail' servico_id=servico.id proposta_id=proposta.pk %}">Ver proposta</a>
+                            {% else %}
+                                Nome do Serviço: {{ proposta.servico.nome }} <br>
+                                Nome do Autor da Proposta: {{ proposta.autor.username }} <br>
+                                Valor: R$ {{ proposta.valor_proposta }}
+                                <a href="{% url 'proposta_detail' servico_id=servico.id proposta_id=proposta.pk %}">Ver proposta</a>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li>Nenhuma proposta encontrada.</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Sem propostas para esse serviço no momento.</p>
+            {% endif %}
+        {% endblock %}
+    </body>
+    </html>
