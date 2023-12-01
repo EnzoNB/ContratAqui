@@ -271,3 +271,26 @@ def detalhe_proposta(request, proposta_id,servico_id):
     is_cliente = proposta.cliente == request.user
 
     return render(request, 'servico/detalhe_proposta.html', {'proposta': proposta, 'is_cliente': is_cliente})
+
+def aceitar_proposta(request, proposta_id):
+    proposta = get_object_or_404(PropostaServico, pk=proposta_id)
+    servico_id = proposta.servico.id
+    cliente = proposta.cliente
+
+    # Lógica para deletar todas as propostas relacionadas a esse serviço e cliente
+    PropostaServico.objects.filter(servico=proposta.servico, cliente=cliente).delete()
+
+    # Aqui você pode adicionar a lógica para aceitar a proposta (se necessário)
+    # Por exemplo, atualizar campos na proposta ou realizar outras ações
+
+    # Redirecionar para a página de detalhes do serviço ou outro lugar desejado
+    return redirect('servico-detail', pk=servico_id)
+
+def recusar_proposta(request, proposta_id):
+    proposta = get_object_or_404(PropostaServico, pk=proposta_id)
+
+    # Lógica para deletar somente a proposta atual
+    proposta.delete()
+
+    # Redirecionar para a página de detalhes do serviço ou outro lugar desejado
+    return redirect('servico-detail', pk=proposta.servico.id)
