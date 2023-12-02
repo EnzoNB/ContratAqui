@@ -51,6 +51,21 @@ class Servico(models.Model):
 
     def __str__(self):
         return self.nome + " | SubCategoria: " + str(self.subcategoria)
+    
+class DiaDaSemana(models.Model):
+    DIAS_DA_SEMANA = [
+        ('Segunda', 'Segunda'),
+        ('Terça', 'Terça'),
+        ('Quarta', 'Quarta'),
+        ('Quinta', 'Quinta'),
+        ('Sexta', 'Sexta'),
+        ('Sábado', 'Sábado'),
+        ('Domingo', 'Domingo'),
+    ]
+    dia = models.CharField(max_length=50, choices=DIAS_DA_SEMANA)
+
+    def __str__(self):
+        return self.dia
 
 class Perfil(models.Model):
     user = models.OneToOneField(User,null=True,on_delete=models.CASCADE)
@@ -59,6 +74,9 @@ class Perfil(models.Model):
     telefone = models.CharField(null=True, blank=True,max_length=11)
     whatsapp = models.CharField(null=True, blank=True,max_length=11)
     instagram = models.CharField(null=True, blank=True,max_length=25)
+    dias_de_trabalho = models.ManyToManyField(DiaDaSemana)
+    horario_entrada = models.TimeField(default='09:00')
+    horario_saida = models.TimeField(default='18:00')
 
     
 class SalaDeMensagens(models.Model):
