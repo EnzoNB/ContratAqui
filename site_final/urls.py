@@ -1,6 +1,6 @@
 from django import views
 from django.urls import path, include
-from .views import HomeView, ServicoDetailView,CategoriaDetailView,CategoriaListView,SubCategoriaDetailView,SubCategoriaListView,ServicoCreateView,ServicoDeleteView,ServicoListView,ServicoUpdateView,SearchView,conversas
+from .views import HomeView, ServicoDetailView,CategoriaDetailView,CategoriaListView,SubCategoriaDetailView,SubCategoriaListView,ServicoCreateView,ServicoDeleteView,ServicoListView,ServicoUpdateView,SearchView
 from . import views
 
 urlpatterns = [
@@ -24,4 +24,5 @@ urlpatterns = [
     path('servico/<int:servico_id>/proposta/<int:proposta_id>/', views.detalhe_proposta, name='proposta_detail'),
     path('proposta/<int:proposta_id>/aceitar/', views.aceitar_proposta, name='aceitar_proposta'),
     path('proposta/<int:proposta_id>/recusar/', views.recusar_proposta, name='recusar_proposta'),
+    path('perfil/<int:perfil_id>/avaliacao/', views.criar_avaliacao, name='criar_avaliacao'),
 ]

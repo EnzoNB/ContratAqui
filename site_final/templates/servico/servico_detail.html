@@ -2,7 +2,17 @@
 <html lang="en">
 
 <head>
-  <!-- ... -->
+  <style>
+    .flex-container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .right-align {
+      text-align: right;
+    }
+    </style>
+    
+    
 </head>
 
 <body>
@@ -37,8 +47,13 @@
       </div>
       <div class="col-md-10">
         <div class="card-body">
-          <h5 class="card-title">Prestador: {{ servico.autor.first_name }} {{ servico.autor.last_name }}</h5>
-
+          <div class="flex-container">
+            <h5 class="card-title">Prestador: {{ servico.autor.first_name }} {{ servico.autor.last_name }}</h5>
+            <div class="right-align">
+              <h6><strong>Nota:</strong>{{servico.autor.perfil.nota_media}}</h6>
+              <h6><strong>Serviços Prestados:</strong>{{servico.autor.perfil.numero_avaliacoes}}</h6>
+            </div>
+          </div>
           {% if servico.autor.perfil.telefone %}
           <span class="card-text"><small
               class="text-body-secondary"><strong>Telefone:</strong> {{servico.autor.perfil.telefone}} </small></span>
@@ -55,7 +70,7 @@
           {% endif %}
 
           {% if servico.autor.perfil.bio %}
-          <p class="card-text">Bio: {{ servico.autor.perfil.bio }}</p>
+          <p class="card-text"><strong>Bio:</strong> {{ servico.autor.perfil.bio }}</p>
           {% endif %}
 
           {% if servico.autor.perfil.dias_de_trabalho %}
