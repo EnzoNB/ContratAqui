@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- ... -->
+  <style>
+    .message-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      max-width: 70%;
+    }
+
+    .message.author {
+      align-self: flex-start;
+      background-color: #d3d3d3;
+    }
+
+    .message.client {
+      align-self: flex-end;
+      background-color: #a2e8d8;
+    }
+  </style>
+</head>
+
+<body>
+  {% extends 'base.html' %}
+  {% block content %}
+  <h1>Troca de Mensagens para: {{ servico.nome }}</h1>
+
+  <div class="message-container">
+    <!-- Exibir as mensagens existentes -->
+    {% if mensagens %}
+      {% for mensagem in mensagens %}
+        <div class="message {% if mensagem.autor == servico.autor %}author{% else %}client{% endif %}">
+          <strong>{{ mensagem.autor.username }}:</strong> {{ mensagem.texto }}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>Nenhuma mensagem ainda. Seja o primeiro a enviar uma mensagem!</p>
+    {% endif %}
+  </div>
+
+  <!-- Formulário para enviar mensagens -->
+  <form action="{% url 'conversas' servico_id=servico.id username=cliente.username autor_username=servico.autor.username %}" method="post">
+    {% csrf_token %}
+    <textarea name="texto_mensagem" rows="4" cols="50"></textarea><br>
+    <button type="submit">Enviar Mensagem</button>
+  </form>
+
+
+  {% if user == servico.autor %}
+    <a href="{% url 'criar_proposta' servico_id=servico.id username=cliente.username autor_username=servico.autor.username %}">Criar Proposta</a>
+  {% endif %}
+  {% if user == cliente %}
+    {% if proposta_criada %}
+      <a href="{% url 'listar_propostas' servico_id=servico.id %}">Ver Propostas</a>
+    {% else %}
+      <p>Ainda não foi criada uma proposta para este serviço.</p>
+    {% endif %}
+  {% endif %}
+
+  {% endblock %}
+</body>
+</html>

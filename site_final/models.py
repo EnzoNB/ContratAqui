@@ -59,3 +59,41 @@ class Perfil(models.Model):
     telefone = models.CharField(null=True, blank=True,max_length=11)
     whatsapp = models.CharField(null=True, blank=True,max_length=11)
     instagram = models.CharField(null=True, blank=True,max_length=25)
+
+    
+class SalaDeMensagens(models.Model):
+    servico = models.ForeignKey('Servico', on_delete=models.CASCADE)
+    clientes = models.ManyToManyField(User, related_name='salas_de_mensagens')
+    identificador_sala = models.CharField(max_length=100, default='seila')
+
+    def __str__(self):
+        return f"Sala de Mensagens para {self.servico.nome}"
+
+class Mensagem(models.Model):
+    sala_de_mensagens = models.ForeignKey(SalaDeMensagens, on_delete=models.CASCADE)
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    texto = models.TextField()
+    data_envio = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Mensagem de {self.autor.username} para {self.sala_de_mensagens.servico.nome}"
+
+class Notificacao(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    sala_de_mensagens = models.ForeignKey(SalaDeMensagens, on_delete=models.CASCADE)
+    visualizada = models.BooleanField(default=False)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notificação para {self.usuario.username}"
+    
+class PropostaServico(models.Model):
+    servico = models.ForeignKey(Servico, on_delete=models.CASCADE)
+    autor = models.ForeignKey(User, related_name='propostas_feitas', on_delete=models.CASCADE)
+    cliente = models.ForeignKey(User, related_name='propostas_recebidas', on_delete=models.CASCADE)
+    valor_proposta = models.DecimalField(max_digits=10, decimal_places=2)
+    aceita = models.BooleanField(null=True, blank=True)
+    recusada = models.BooleanField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Proposta de {self.autor.username} para {self.servico.nome}"

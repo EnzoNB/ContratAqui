@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContratAqui</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+    <h2>Detalhes da Proposta</h2>
+    <p>Proposta de: {{ proposta.autor.username }}</p>
+    <p>Valor da Proposta: {{ proposta.valor_proposta }}</p>
+    
+    {% if is_cliente %}
+        <a href="{% url 'aceitar_proposta' proposta_id=proposta.id %}">Aceitar</a>
+        <a href="{% url 'recusar_proposta' proposta_id=proposta.id %}">Recusar</a>
+    {% endif %}
+    {% endblock %}
+</body>
+</html>

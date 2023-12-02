@@ -1,0 +1,19 @@
+navigation-box {
+    padding:12px; 
+    background-color: black ;
+    color: rgb(126,217,87); 
+    font-size: 25px;
+}
+
+footer {
+    position: fixed;
+    height: 10%;
+    flex-direction: row;
+    bottom: 0;
+    right: 0;
+    left: 0;  
+    text-align: center;
+    padding: 5px;
+    background-color: black;
+    color: rgb(126,217,87);
+  }
