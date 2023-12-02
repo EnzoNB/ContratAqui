@@ -77,6 +77,8 @@ class Perfil(models.Model):
     dias_de_trabalho = models.ManyToManyField(DiaDaSemana)
     horario_entrada = models.TimeField(default='09:00')
     horario_saida = models.TimeField(default='18:00')
+    nota_media = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
+    numero_avaliacoes = models.IntegerField(default=0)
 
     
 class SalaDeMensagens(models.Model):
@@ -115,3 +117,11 @@ class PropostaServico(models.Model):
 
     def __str__(self):
         return f"Proposta de {self.autor.username} para {self.servico.nome}"
+    
+
+
+
+class Avaliacao(models.Model):
+    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='avaliacoes')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    nota = models.IntegerField()

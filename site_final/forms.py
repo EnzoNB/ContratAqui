@@ -1,5 +1,5 @@
 from django import forms
-from .models import Servico,Categoria,SubCategoria
+from .models import Servico
 from ajax_select.fields import AutoCompleteSelectField
 
 

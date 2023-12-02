@@ -1,15 +1,13 @@
 from django.shortcuts import get_object_or_404, render,redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.urls import reverse, reverse_lazy
-from .models import Categoria,SubCategoria,Servico,Mensagem,SalaDeMensagens,Notificacao,PropostaServico
+from django.urls import reverse_lazy
+from .models import Categoria,SubCategoria,Servico,Mensagem,SalaDeMensagens,PropostaServico, Perfil, Avaliacao
 from .forms import ServicoForm,ServicoUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 
@@ -294,3 +292,19 @@ def recusar_proposta(request, proposta_id):
 
     # Redirecionar para a página de detalhes do serviço ou outro lugar desejado
     return redirect('servico-detail', pk=proposta.servico.id)
+
+def criar_avaliacao(request, perfil_id):
+    perfil = get_object_or_404(Perfil, pk=perfil_id)
+    if request.method == 'POST':
+        nota = request.POST.get('nota')
+        Avaliacao.objects.create(perfil=perfil, usuario=request.user, nota=nota)
+        atualizar_nota_media(perfil)
+        return redirect('home')
+    return render(request, 'criar_avaliacao.html', {'perfil': perfil})
+
+def atualizar_nota_media(perfil):
+    avaliacoes = Avaliacao.objects.filter(perfil=perfil)
+    nota_media = sum(a.nota for a in avaliacoes) / avaliacoes.count()
+    perfil.nota_media = nota_media
+    perfil.numero_avaliacoes = avaliacoes.count()
+    perfil.save()
