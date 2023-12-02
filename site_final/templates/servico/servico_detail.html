@@ -36,16 +36,38 @@
           <span class="card-text"><small
               class="text-body-secondary"><strong>Telefone:</strong> {{servico.autor.perfil.telefone}} </small></span>
           {% endif %}
+
           {% if servico.autor.perfil.whatsapp %}
           <span class="card-text"><small
               class="text-body-secondary"><strong>Whatsapp:</strong> {{servico.autor.perfil.whatsapp}} </small></span>
           {% endif %}
+
           {% if servico.autor.perfil.instagram %}
           <span class="card-text"><small
               class="text-body-secondary"><strong>Instagram:</strong> {{servico.autor.perfil.instagram}} </small></span>
           {% endif %}
 
+          {% if servico.autor.perfil.bio %}
           <p class="card-text">Bio: {{ servico.autor.perfil.bio }}</p>
+          {% endif %}
+
+          {% if servico.autor.perfil.dias_de_trabalho %}
+          <span class="card-text"><small
+            class="text-body-secondary"><strong>Dias de Trabalho:</strong>
+          {% for dia in servico.autor.perfil.dias_de_trabalho.all %}
+           {{ dia }} |
+          {% endfor %}</small></span>
+          {% endif %}
+
+          {% if servico.autor.perfil.horario_entrada %}
+          <span class="card-text"><small
+            class="text-body-secondary"><strong>Horário de Entrada:</strong> {{ servico.autor.perfil.horario_entrada|time:"H:i" }}</small></span>
+          {% endif %}
+
+          {% if servico.autor.perfil.horario_saida %}
+          <span class="card-text"><small
+            class="text-body-secondary"><strong>Horário de Saída:</strong> {{ servico.autor.perfil.horario_saida|time:"H:i" }}</small></span>
+          {% endif %}
 
         </div>
       </div>

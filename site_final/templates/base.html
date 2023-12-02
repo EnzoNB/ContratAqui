@@ -16,16 +16,13 @@
       </a>
     </div>
     <hr>
-    <div>
-    <a class="navbar-brand" href="{% url 'home' %}" style = "padding:12px; background-color: black ; color: rgb(126,217,87); font-size: 25px;">Home</a>
-    </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle"  href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding:10px; background-color: rgb(29, 29, 29);color: rgb(126,217,87); font-size: 15px;">Serviços Populares</a>
           <ul class="dropdown-menu">
             {% for item in list_types %}
-            <li><a class="dropdown-item" href="{% url 'subcategoria_list' item %}"style="padding:10px; background-color: rgb(29, 29, 29);color: rgb(126,217,87); font-size: 15px;">{{item}}</a></li>
+            <li><a class="dropdown-item" href="{% url 'subcategoria_list' item %}" style="padding:15px; background-color: rgb(29, 29, 29);color: rgb(126,217,87); font-size: 15px;">{{item}}</a></li>
             {% endfor %}
             
           </ul>
@@ -72,10 +69,11 @@
     {% block content %}
     {% endblock %}
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-  
+  <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>-->
   <style>
+  
     footer {
       position: fixed;
       height: 10%;
@@ -89,10 +87,6 @@
       color: rgb(126,217,87);
     }
   </style>
-  <footer>
-    <p>ContratAqui<br>
-      © Copyright 2023</p>
-  </footer>
 </body>
 
 </html>
