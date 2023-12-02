@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ContratAqui</title>
+  <!-- ... -->
 </head>
 
 <body>
@@ -17,10 +15,11 @@
   <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
   <p><strong>Preço:</strong> R${{ servico.preco }}</p>
 
-
-  {% if user.is_authenticated and user == servico.autor %}
-  <p><b><a style="color:rgb(13, 27, 13)" href="{% url 'servico-update' pk=servico.pk %}">Editar Serviço</a></b></p>
-  <b><a style="color:rgb(13, 27, 13)" href="{% url 'servico-delete' pk=servico.pk %}">Deletar Serviço</a></b>
+  {% if not user.is_authenticated or user != servico.autor %}
+  <form action="{% url 'conversas' servico_id=servico.id username=request.user.username autor_username=servico.autor.username %}" method="post">
+    {% csrf_token %}
+    <button type="submit">ContratAqui</button>
+  </form>
   {% endif %}
 
   <br><br><br>
@@ -45,7 +44,6 @@
           <span class="card-text"><small
               class="text-body-secondary"><strong>Instagram:</strong> {{servico.autor.perfil.instagram}} </small></span>
           {% endif %}
-
 
           <p class="card-text">Bio: {{ servico.autor.perfil.bio }}</p>
 
