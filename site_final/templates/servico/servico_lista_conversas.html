@@ -17,7 +17,7 @@
             {{ sala.servico.nome }} -
             {% for cliente in sala.clientes.all %}
                 {% if cliente != usuario %}
-                Cliente: {{ cliente.username }}
+                Cliente: {{ cliente.first_name }}
                 <form action="{% url 'conversas' sala.servico.pk cliente.username sala.servico.autor.username %}">
                     <button type="submit">Abrir Conversa</button>
                 </form>
@@ -36,7 +36,7 @@
         {% for sala in salas_cliente %}
         <li>
             <form action="{% url 'conversas' sala.servico.pk usuario.username sala.servico.autor.username %}">
-                <button type="submit">{{ sala.servico.nome }} - Autor do Serviço: {{ sala.servico.autor.username }}</button>
+                <button type="submit">{{ sala.servico.nome }} - Autor do Serviço: {{ sala.servico.autor.first_name }}</button>
             </form>
             <!-- Adicionando botão para listar propostas -->
             <form action="{% url 'listar_propostas' sala.servico.pk %}">
