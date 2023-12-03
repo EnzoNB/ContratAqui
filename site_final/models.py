@@ -125,3 +125,10 @@ class Avaliacao(models.Model):
     perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='avaliacoes')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     nota = models.IntegerField()
+
+class PropostaAceita(models.Model):
+    proposta = models.OneToOneField(PropostaServico, on_delete=models.CASCADE, related_name='proposta_aceita')
+    concluida = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Proposta aceita para {self.proposta.servico.nome}"
