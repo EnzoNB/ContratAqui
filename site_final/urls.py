@@ -25,4 +25,7 @@ urlpatterns = [
     path('proposta/<int:proposta_id>/aceitar/', views.aceitar_proposta, name='aceitar_proposta'),
     path('proposta/<int:proposta_id>/recusar/', views.recusar_proposta, name='recusar_proposta'),
     path('perfil/<int:perfil_id>/avaliacao/', views.criar_avaliacao, name='criar_avaliacao'),
+    path('detalhe_proposta_aceita/<int:proposta_aceita_id>/', views.detalhe_proposta_aceita, name='detalhe_proposta_aceita'),
+    path('finalizar_proposta_aceita/<int:proposta_aceita_id>/', views.finalizar_proposta_aceita, name='finalizar_proposta_aceita'),
+
 ]
