@@ -1,3 +1,4 @@
+# Em um novo arquivo chamado context_processors.py
 from .models import Categoria
 
 def categorias(request):

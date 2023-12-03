@@ -25,20 +25,18 @@
   <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
   <p><strong>Preço:</strong> R${{ servico.preco }}</p>
 
-  {% if user.is_authenticated %}
-    {% if user != servico.autor %}
-      <form action="{% url 'conversas' servico_id=servico.id username=request.user.username autor_username=servico.autor.username %}" method="post">
-      {% csrf_token %}
-      <button type="submit">ContratAqui</button>
-    </form>
-    {% else %}
-    <a href="{% url 'servico-update' pk=servico.pk %}" class="btn btn-primary">Editar</a>
-    <form action="{% url 'servico-delete' pk=servico.pk %}" method="post" style="display: inline;">
-      {% csrf_token %}
-      <input type="hidden" name="action" value="delete">
-      <button type="submit" class="btn btn-danger">Excluir</button>
-    </form>
-    {% endif %}
+  {% if not user.is_authenticated or user != servico.autor %}
+  <form action="{% url 'conversas' servico_id=servico.id username=request.user.username autor_username=servico.autor.username %}" method="post">
+    {% csrf_token %}
+    <button type="submit">ContratAqui</button>
+  </form>
+{% else %}
+  <a href="{% url 'servico-update' pk=servico.pk %}" class="btn btn-primary">Editar</a>
+  <form action="{% url 'servico-delete' pk=servico.pk %}" method="post" style="display: inline;">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="delete">
+    <button type="submit" class="btn btn-danger">Excluir</button>
+  </form>
   {% endif %}
 
   <br><br><br>
