@@ -1,14 +1,14 @@
 from django.shortcuts import get_object_or_404, render,redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Categoria,SubCategoria,Servico,Mensagem,SalaDeMensagens,PropostaServico, Perfil, Avaliacao
+from .models import Categoria,SubCategoria,Servico,Mensagem,SalaDeMensagens,PropostaServico, Perfil, Avaliacao,PropostaAceita
 from .forms import ServicoForm,ServicoUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-
+from django.db import IntegrityError
 
 
 class HomeView(ListView):
@@ -225,15 +225,27 @@ def conversas(request, servico_id, username, autor_username):
         'user': request.user  # Adicionei 'user' ao contexto
     })
 def servico_lista_conversas(request, username):
-    usuario = get_object_or_404(User, username=username)
-
-    # Obtém todas as salas de mensagens em que o usuário é o autor do serviço
+    usuario = request.user
     salas_autor = SalaDeMensagens.objects.filter(servico__autor=usuario)
-
-    # Obtém todas as salas de mensagens em que o usuário é um cliente do serviço
     salas_cliente = SalaDeMensagens.objects.filter(clientes=usuario).exclude(servico__autor=usuario)
-
-    return render(request, 'servico/servico_lista_conversas.html', {'salas_autor': salas_autor, 'salas_cliente': salas_cliente, 'usuario': usuario})
+    
+    # Obtendo propostas aceitas do usuário logado, como autor e como cliente
+    propostas_aceitas_autor = PropostaAceita.objects.filter(proposta__servico__autor=usuario, concluida=False)
+    propostas_aceitas_cliente = PropostaAceita.objects.filter(proposta__cliente=usuario, concluida=False)
+    
+    # Verificando se existem propostas aceitas finalizadas, tanto como autor quanto como cliente
+    propostas_aceitas_finalizadas_autor = PropostaAceita.objects.filter(proposta__servico__autor=usuario, concluida=True)
+    propostas_aceitas_finalizadas_cliente = PropostaAceita.objects.filter(proposta__cliente=usuario, concluida=True)
+    
+    return render(request, 'servico/servico_lista_conversas.html', {
+        'salas_autor': salas_autor,
+        'salas_cliente': salas_cliente,
+        'usuario': usuario,
+        'propostas_aceitas_autor': propostas_aceitas_autor,
+        'propostas_aceitas_cliente': propostas_aceitas_cliente,
+        'propostas_aceitas_finalizadas_autor': propostas_aceitas_finalizadas_autor,
+        'propostas_aceitas_finalizadas_cliente': propostas_aceitas_finalizadas_cliente,
+    })
 
 
 def criar_proposta(request, servico_id, username, autor_username):
@@ -252,17 +264,24 @@ def criar_proposta(request, servico_id, username, autor_username):
 
 @login_required
 def listar_propostas(request, servico_id):
-    # Obtém o serviço pelo ID
     servico = get_object_or_404(Servico, pk=servico_id)
     
-    # Verifica se o usuário é o autor do serviço ou não
+    proposta_aceita = PropostaAceita.objects.filter(proposta__servico=servico, concluida=True).first()
+    
+    if proposta_aceita:
+        # Se houver uma proposta aceita e concluída para esse serviço, redirecione para a página de detalhes da proposta aceita
+        return redirect('detalhe_proposta_aceita', proposta_aceita_id=proposta_aceita.id)
+    
+    # Se não houver proposta aceita concluída, continue listando as propostas normais
     if request.user == servico.autor:
-        # Se o usuário for o autor, obtém todas as propostas relacionadas a esse serviço
         propostas = PropostaServico.objects.filter(servico=servico)
     else:
         propostas = PropostaServico.objects.filter(servico=servico, cliente=request.user)
 
-    return render(request, 'servico/listar_propostas.html', {'propostas': propostas, 'servico': servico})
+    # Enviar para o template a informação sobre se há uma proposta aceita para este serviço
+    proposta_aceita = PropostaAceita.objects.filter(proposta__servico=servico).exists()
+
+    return render(request, 'servico/listar_propostas.html', {'propostas': propostas, 'servico': servico, 'proposta_aceita': proposta_aceita})
 
 def detalhe_proposta(request, proposta_id,servico_id):
     proposta = get_object_or_404(PropostaServico, pk=proposta_id)
@@ -270,20 +289,25 @@ def detalhe_proposta(request, proposta_id,servico_id):
 
     return render(request, 'servico/detalhe_proposta.html', {'proposta': proposta, 'is_cliente': is_cliente})
 
+
 def aceitar_proposta(request, proposta_id):
     proposta = get_object_or_404(PropostaServico, pk=proposta_id)
     servico_id = proposta.servico.id
     cliente = proposta.cliente
 
-    # Lógica para deletar todas as propostas relacionadas a esse serviço e cliente
-    PropostaServico.objects.filter(servico=proposta.servico, cliente=cliente).delete()
-
-    # Aqui você pode adicionar a lógica para aceitar a proposta (se necessário)
-    # Por exemplo, atualizar campos na proposta ou realizar outras ações
-
-    # Redirecionar para a página de detalhes do serviço ou outro lugar desejado
-    return redirect('servico-detail', pk=servico_id)
-
+    try:
+        # Salvar a proposta como PropostaAceita
+        proposta_aceita, created = PropostaAceita.objects.get_or_create(proposta=proposta)
+        if created:
+            proposta_aceita.save()
+            # Remover outras propostas relacionadas a esse serviço e cliente, exceto a proposta aceita
+            PropostaServico.objects.filter(servico=proposta.servico, cliente=cliente).exclude(pk=proposta_id).delete()
+            return redirect('detalhe_proposta_aceita', proposta_aceita_id=proposta_aceita.id)
+        else:
+            return redirect('detalhe_proposta_aceita', proposta_aceita_id=proposta_aceita.id)
+    except IntegrityError:
+        # Lógica para lidar com erros de integridade (opcional)
+        pass
 def recusar_proposta(request, proposta_id):
     proposta = get_object_or_404(PropostaServico, pk=proposta_id)
 
@@ -308,3 +332,22 @@ def atualizar_nota_media(perfil):
     perfil.nota_media = nota_media
     perfil.numero_avaliacoes = avaliacoes.count()
     perfil.save()
+
+
+def detalhe_proposta_aceita(request, proposta_aceita_id):
+    proposta_aceita = get_object_or_404(PropostaAceita, pk=proposta_aceita_id)
+    propostas_aceitas = PropostaAceita.objects.filter(proposta=proposta_aceita.proposta, concluida=True)
+    
+    is_cliente = request.user == proposta_aceita.proposta.cliente
+    
+    return render(request, 'servico/detalhe_proposta_aceita.html', {'proposta_aceita': proposta_aceita, 'propostas_aceitas': propostas_aceitas, 'is_cliente': is_cliente})
+
+def finalizar_proposta_aceita(request, proposta_aceita_id):
+    proposta_aceita = get_object_or_404(PropostaAceita, pk=proposta_aceita_id)
+
+    if request.method == 'POST':
+        proposta_aceita.concluida = True
+        proposta_aceita.save()
+        return redirect('criar_avaliacao', perfil_id=proposta_aceita.proposta.autor.perfil.id)
+
+    return render(request, 'servico/finalizar_proposta_aceita.html', {'proposta_aceita': proposta_aceita})

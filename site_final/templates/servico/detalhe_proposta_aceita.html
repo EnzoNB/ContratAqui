@@ -1,0 +1,27 @@
+<!-- detalhe_proposta_aceita.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Proposta</title>
+</head>
+<body>
+    <h2>Detalhes da Proposta</h2>
+    <p>Proposta de: {{ proposta_aceita.proposta.autor.username }}</p>
+    <p>Valor da Proposta: {{ proposta_aceita.proposta.valor_proposta }}</p>
+
+    <!-- Mostrar botão apenas para o cliente -->
+    {% if is_cliente %}
+        <form action="{% url 'finalizar_proposta_aceita' proposta_aceita.id %}">
+            {% csrf_token %}
+            <input type="submit" value="Serviço foi finalizado">
+        </form>
+    {% endif %}
+
+    <!-- Botão para voltar para servico_lista_conversas -->
+    <a href="{% url 'servico_lista_conversas' username=request.user.username %}">Voltar para lista de conversas</a>
+
+    <!-- Adicione mais detalhes da proposta aceita, se necessário -->
+</body>
+</html>
