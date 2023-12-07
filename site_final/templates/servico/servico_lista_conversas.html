@@ -17,15 +17,31 @@
             {{ sala.servico.nome }} -
             {% for cliente in sala.clientes.all %}
                 {% if cliente != usuario %}
-                Cliente: {{ cliente.first_name }}
+                Cliente: {{ cliente.username }}
                 <form action="{% url 'conversas' sala.servico.pk cliente.username sala.servico.autor.username %}">
                     <button type="submit">Abrir Conversa</button>
                 </form>
                 {% endif %}
             {% endfor %}
+            
             <!-- Adicionando botão para listar propostas -->
             <form action="{% url 'listar_propostas' sala.servico.pk %}">
                 <button type="submit">Listar Propostas</button>
+                {% for proposta_aceita in propostas_aceitas %}
+                    {% if proposta_aceita.proposta.servico == sala.servico and proposta_aceita.proposta.autor == sala.servico.autor and proposta_aceita.proposta.cliente != usuario %}
+                        <!-- Verifica se a condição acima identifica corretamente a proposta aceita -->
+                        <form action="{% url 'detalhe_proposta_aceita' proposta_aceita.id %}">
+                            <button type="submit">Serviço em andamento</button>
+                        </form>
+                    {% endif %}
+                {% endfor %}
+                
+                <!-- Frase "Serviço finalizado" para o autor -->
+                {% for proposta_aceita_finalizada in propostas_aceitas_finalizadas_autor %}
+                    {% if proposta_aceita_finalizada.proposta.servico == sala.servico and proposta_aceita_finalizada.proposta.autor == sala.servico.autor %}
+                        <p>Serviço finalizado</p>
+                    {% endif %}
+                {% endfor %}
             </form>
         </li>
         {% endfor %}
@@ -36,11 +52,27 @@
         {% for sala in salas_cliente %}
         <li>
             <form action="{% url 'conversas' sala.servico.pk usuario.username sala.servico.autor.username %}">
-                <button type="submit">{{ sala.servico.nome }} - Autor do Serviço: {{ sala.servico.autor.first_name }}</button>
+                <button type="submit">{{ sala.servico.nome }} - Autor do Serviço: {{ sala.servico.autor.username }}</button>
             </form>
             <!-- Adicionando botão para listar propostas -->
             <form action="{% url 'listar_propostas' sala.servico.pk %}">
                 <button type="submit">Listar Propostas</button>
+                
+                <!-- Botão "Serviço em andamento" para o cliente -->
+                {% for proposta_aceita in propostas_aceitas %}
+                    {% if proposta_aceita.proposta.servico == sala.servico and proposta_aceita.proposta.cliente == cliente and proposta_aceita.proposta.autor == sala.servico.autor %}
+                        <!-- Verificar se a condição acima está identificando corretamente a proposta aceita -->
+                        <form action="{% url 'detalhe_proposta_aceita' proposta_aceita.id %}">
+                            <button type="submit">Serviço em andamento</button>
+                        </form>
+                    {% endif %}
+                {% endfor %}
+                <!-- Frase "Serviço finalizado" para o cliente -->
+                {% for proposta_aceita_finalizada in propostas_aceitas_finalizadas_cliente %}
+                    {% if proposta_aceita_finalizada.proposta.servico == sala.servico and proposta_aceita_finalizada.proposta.cliente == usuario and proposta_aceita_finalizada.proposta.autor != usuario %}
+                        <p>Serviço finalizado</p>
+                    {% endif %}
+                {% endfor %}
             </form>
         </li>
         {% endfor %}
