@@ -1,12 +1,12 @@
-<!-- finalizar_proposta.html -->
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finalizar Proposta</title>
+    <title>ContratAqui</title>
 </head>
 <body>
+    {% extends 'base.html' %}
+    {% block content %}
     <h1>Finalizar Proposta</h1>
     <p>Tem certeza de que deseja marcar esta proposta como concluída?</p>
 
@@ -15,5 +15,6 @@
         <input type="submit" value="Marcar como concluída">
     </form>
     <a href="{% url 'servico_lista_conversas' username=request.user.username %}">Voltar para lista de conversas</a>
+    {% endblock %}
 </body>
 </html>
